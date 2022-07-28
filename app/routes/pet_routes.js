@@ -34,6 +34,7 @@ router.get('/pets', (req, res, next) => {
     // if these resources should be protected, requireToken can be added back in, placed between route and callback on function line 1
     // second argument
 	Pet.find()
+        .populate('owner')
 		.then((pets) => {
 			// `pets` will be an array of Mongoose documents
 			// we want to convert each one to a POJO, so we use `.map` to
@@ -52,6 +53,7 @@ router.get('/pets/:id', (req, res, next) => {
     // remove requireToken so everyone can see individual pets as well
 	// req.params.id will be set based on the `:id` in the route
 	Pet.findById(req.params.id)
+        .populate('owner')
 		.then(handle404)
 		// if `findById` is succesful, respond with 200 and "pet" JSON
 		.then((pet) => res.status(200).json({ pet: pet.toObject() }))
